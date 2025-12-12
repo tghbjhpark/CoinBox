@@ -1,0 +1,20 @@
+services:
+  trader:
+    build: .
+    container_name: upbit-auto-trader
+    env_file: .env
+    command: >
+      python -m app.main
+      --market ${MARKET:-KRW-BTC}
+      --krw ${KRW_PER_CYCLE:-10000}
+      --tp ${TAKE_PROFIT_PERCENT:-1.0}
+      --interval ${INTERVAL_SEC:-60}
+      ${DRY_RUN_FLAG:-}
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Seoul
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
